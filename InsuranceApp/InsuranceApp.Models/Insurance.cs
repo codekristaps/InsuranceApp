@@ -20,5 +20,6 @@ namespace InsuranceApp.Models
 
         // Navigation property for the related product
         public Product Product { get; set; }
+
     }
 }
