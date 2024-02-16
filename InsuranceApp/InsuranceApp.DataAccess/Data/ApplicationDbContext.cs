@@ -12,8 +12,9 @@ namespace InsuranceApp.DataAccess.Data
 
         }
 
-        public DbSet<Customer> Customer { get; set; }
+        public DbSet<InsuranceCustomer> InsuranceCustomer { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Insurance> Insurances { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

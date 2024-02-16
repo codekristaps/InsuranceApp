@@ -26,9 +26,9 @@ namespace InsuranceApp.Models
         [Required]
         public decimal Price { get; set; }
 
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
-        public DateTime EndDate { get; set; } // generated for 1 year after purchase date
+        public DateTime? EndDate { get; set; } // generated for 1 year after purchase date
     }
 
     public enum ProductType

@@ -3,10 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace InsuranceApp.Models
 {
-    public class Customer : IdentityUser
+    public class InsuranceCustomer : IdentityUser
     {
-        [Key]
-        public int CustomerId { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
@@ -15,6 +13,7 @@ namespace InsuranceApp.Models
         public string? City { get; set; }
         public string? State { get; set; }
         public string? PostalCode { get; set; }
-        public DateTime BirthDate { get; set; }
+        [Required]
+        public string BirthDate { get; set; }
     }
 }
