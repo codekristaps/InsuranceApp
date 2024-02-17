@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240216193251_InitialMigration777")]
-    partial class InitialMigration777
+    [Migration("20240217142222_ChangesToInsuranceProducts5")]
+    partial class ChangesToInsuranceProducts5
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,40 +27,58 @@ namespace InsuranceApp.DataAccess.Migrations
 
             modelBuilder.Entity("InsuranceApp.Models.Insurance", b =>
                 {
-                    b.Property<int>("InsuranceId")
+                    b.Property<Guid>("InsuranceId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InsuranceId"));
-
-                    b.Property<string>("PolicyNumber")
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("InsuranceId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("Insurances");
+
+                    b.HasData(
+                        new
+                        {
+                            InsuranceId = new Guid("31d68f1f-b0e5-4d20-ba00-ebe2fb6a4258"),
+                            Name = "Life Insurance"
+                        },
+                        new
+                        {
+                            InsuranceId = new Guid("bc809bfb-89d9-4dbd-85f1-e923a578c612"),
+                            Name = "Health Insurance"
+                        },
+                        new
+                        {
+                            InsuranceId = new Guid("df852593-8164-47cc-8b53-f4297206e197"),
+                            Name = "Car Insurance"
+                        },
+                        new
+                        {
+                            InsuranceId = new Guid("2137da24-d61f-4357-ae97-ee9f7a27b391"),
+                            Name = "Home Insurance"
+                        },
+                        new
+                        {
+                            InsuranceId = new Guid("f08044ce-500f-4d49-93f4-3866ce01e611"),
+                            Name = "Travel Insurance"
+                        });
                 });
 
-            modelBuilder.Entity("InsuranceApp.Models.Product", b =>
+            modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<Guid>("InsuranceProductId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<decimal?>("Discount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -69,15 +87,101 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
+                    b.HasKey("InsuranceProductId");
+
+                    b.ToTable("InsuranceProducts");
+
+                    b.HasData(
+                        new
+                        {
+                            InsuranceProductId = new Guid("79acbf17-6d8c-453d-bd1e-c80c580dea9b"),
+                            Description = "This is a life insurance product.",
+                            Discount = 10.00m,
+                            Name = "Life Insurance Product",
+                            Price = 100.00m,
+                            Type = 0
+                        },
+                        new
+                        {
+                            InsuranceProductId = new Guid("8010145d-8d70-4422-a1e0-2f2ad013fc95"),
+                            Description = "This is a health insurance product.",
+                            Discount = 20.00m,
+                            Name = "Health Insurance Product",
+                            Price = 200.00m,
+                            Type = 1
+                        },
+                        new
+                        {
+                            InsuranceProductId = new Guid("da411237-6a05-4f65-91fd-ce4fa867585e"),
+                            Description = "This is a car insurance product.",
+                            Discount = 30.00m,
+                            Name = "Car Insurance Product",
+                            Price = 300.00m,
+                            Type = 2
+                        },
+                        new
+                        {
+                            InsuranceProductId = new Guid("6653580a-26dd-4d3b-987e-e691544d1429"),
+                            Description = "This is a home insurance product.",
+                            Discount = 40.00m,
+                            Name = "Home Insurance Product",
+                            Price = 400.00m,
+                            Type = 3
+                        },
+                        new
+                        {
+                            InsuranceProductId = new Guid("15313a63-32ac-4c24-a435-fc837135684f"),
+                            Description = "This is a travel insurance product.",
+                            Discount = 50.00m,
+                            Name = "Travel Insurance Product",
+                            Price = 500.00m,
+                            Type = 4
+                        });
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.Product", b =>
+                {
+                    b.Property<Guid>("ProductId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomerId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<Guid>("InsuranceProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PurchaseDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("ProductId");
 
+                    b.HasIndex("CustomerId1");
+
+                    b.HasIndex("InsuranceProductId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("InsuranceInsuranceProduct", b =>
+                {
+                    b.Property<Guid>("InsuranceProductsInsuranceProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("InsurancesInsuranceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("InsuranceProductsInsuranceProductId", "InsurancesInsuranceId");
+
+                    b.HasIndex("InsurancesInsuranceId");
+
+                    b.ToTable("InsuranceInsuranceProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -291,12 +395,6 @@ namespace InsuranceApp.DataAccess.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -305,27 +403,46 @@ namespace InsuranceApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PostalCode")
+                    b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("State")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
+                    b.Property<string>("Roles")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("InsuranceCustomer");
                 });
 
-            modelBuilder.Entity("InsuranceApp.Models.Insurance", b =>
+            modelBuilder.Entity("InsuranceApp.Models.Product", b =>
                 {
-                    b.HasOne("InsuranceApp.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
+                    b.HasOne("InsuranceApp.Models.InsuranceCustomer", "Customer")
+                        .WithMany("Products")
+                        .HasForeignKey("CustomerId1");
+
+                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "InsuranceProduct")
+                        .WithMany("Products")
+                        .HasForeignKey("InsuranceProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Customer");
+
+                    b.Navigation("InsuranceProduct");
+                });
+
+            modelBuilder.Entity("InsuranceInsuranceProduct", b =>
+                {
+                    b.HasOne("InsuranceApp.Models.InsuranceProduct", null)
+                        .WithMany()
+                        .HasForeignKey("InsuranceProductsInsuranceProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InsuranceApp.Models.Insurance", null)
+                        .WithMany()
+                        .HasForeignKey("InsurancesInsuranceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -377,6 +494,16 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.InsuranceCustomer", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -110,21 +111,17 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
             // for learning purposes
             public string? Role { get; set; }
 
-            // let's create a list for the dropdown
-            [ValidateNever]
-            public IEnumerable<SelectListItem> RoleList { get; set; }
-
             [Required]
             public string FirstName { get; set; }
             [Required]
             public string LastName { get; set; }
-            public string? StreetAddress { get; set; }
-            public string? City { get; set; }
-            public string? State { get; set; }
-            // later I need to add the postal code population when I start to type it in the form
-            public string? PostalCode { get; set; }
-            [Required]
-            public DateTime BirthDate { get; set; }
+            //public string? StreetAddress { get; set; }
+            //public string? City { get; set; }
+            //public string? State { get; set; }
+            //// later I need to add the postal code population when I start to type it in the form
+            //public string? PostalCode { get; set; }
+            //[Required]
+            //public DateTime BirthDate { get; set; }
         }
 
 
@@ -138,16 +135,6 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).GetAwaiter().GetResult();
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Company)).GetAwaiter().GetResult();
             }
-
-            // now we need to populate 'public IEnumerable<SelectListItem> RoleList { get; set; }'
-            Input = new()
-            {
-                RoleList = _roleManager.Roles.Select(x => x.Name).Select(i => new SelectListItem
-                {
-                    Text = i,
-                    Value = i
-                })
-            };
 
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
@@ -166,12 +153,11 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
 
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.StreetAddress = Input.StreetAddress;
-                user.City = Input.City;
-                user.State = Input.State;
-                user.PostalCode = Input.PostalCode;
-                user.BirthDate = Input.BirthDate.ToString();
-
+                //user.StreetAddress = Input.StreetAddress;
+                //user.City = Input.City;
+                //user.State = Input.State;
+                //user.PostalCode = Input.PostalCode;
+                //user.BirthDate = Input.BirthDate;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

@@ -1,0 +1,33 @@
+﻿@model InsuranceApp.Models.Insurance
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2>Create Insurance</h2>
+        </div>
+    </div>
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="row pb-3">
+            <div class="col-6 col-md-3">
+                <input type="submit" value="Create" class="btn btn-danger form-control" />
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-action="Index" class="btn btn-outline-secondary form-control border">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

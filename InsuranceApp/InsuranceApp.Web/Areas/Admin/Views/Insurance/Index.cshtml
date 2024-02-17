@@ -1,0 +1,37 @@
+﻿@model List<Insurance>
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2>
+                Insurances
+            </h2>
+        </div>
+    </div>
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Create New Insurance</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Insurance ID</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.InsuranceId</td>
+                    <td class="text-end">
+                        <!-- Add the class "text-end" here -->
+                        <a asp-action="Edit" asp-route-id="@item.InsuranceId" class="btn editButton">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.InsuranceId" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

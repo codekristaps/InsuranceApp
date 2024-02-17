@@ -1,0 +1,50 @@
+﻿@model CreateInsuranceProductViewModel
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2>Create Insurance Product</h2>
+        </div>
+    </div>
+    <form asp-action="Create" asp-controller="InsuranceProduct" method="post">
+        <div class="form-group">
+            <label asp-for="InsuranceProduct.Name" class="control-label"></label>
+            <input asp-for="InsuranceProduct.Name" class="form-control" />
+            <span asp-validation-for="InsuranceProduct.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="InsuranceProduct.Description" class="control-label"></label>
+            <input asp-for="InsuranceProduct.Description" class="form-control" />
+            <span asp-validation-for="InsuranceProduct.Description" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="InsuranceProduct.Price" class="control-label"></label>
+            <input asp-for="InsuranceProduct.Price" class="form-control" />
+            <span asp-validation-for="InsuranceProduct.Price" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="InsuranceProduct.InsuranceId" class="control-label"></label>
+            <select asp-for="InsuranceProduct.InsuranceId" class="form-control">
+                <option value="">-- Select Insurance --</option>
+                @foreach (var insurance in Model.Insurances)
+                {
+                    <option value="@insurance.InsuranceId">@insurance.Name</option>
+                }
+            </select>
+        </div>
+        <div class="row pb-3">
+            <div class="col-6 col-md-3">
+                <input type="submit" value="Create" class="btn btn-danger form-control" />
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-action="Index" class="btn btn-outline-secondary form-control border">Back to List</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

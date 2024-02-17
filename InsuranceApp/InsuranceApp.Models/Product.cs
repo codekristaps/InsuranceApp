@@ -10,33 +10,19 @@ namespace InsuranceApp.Models
     public class Product
     {
         [Key]
-        public int ProductId { get; set; }
+        public Guid ProductId { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        public Guid InsuranceProductId { get; set; }
 
         [Required]
-        public string Description { get; set; }
+        public Guid? CustomerId { get; set; }
 
         [Required]
-        public ProductType Type { get; set; }
+        public DateTime? PurchaseDate { get; set; }
 
-        // Define other relevant properties such as coverage details, pricing, etc.
-        // For example:
-        [Required]
-        public decimal Price { get; set; }
-
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; } // generated for 1 year after purchase date
-    }
-
-    public enum ProductType
-    {
-        LifeInsurance,
-        HealthInsurance,
-        CarInsurance,
-        HomeInsurance,
-        // Add more types as needed
+        // Navigation properties
+        public InsuranceProduct InsuranceProduct { get; set; }
+        public InsuranceCustomer? Customer { get; set; }
     }
 }

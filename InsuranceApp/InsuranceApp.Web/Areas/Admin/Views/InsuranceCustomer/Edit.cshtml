@@ -1,0 +1,68 @@
+﻿@model InsuranceCustomer
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2>
+                Edit Customer
+            </h2>
+        </div>
+    </div>
+    <div>
+        <form method="post">
+            <input type="hidden" asp-for="Id" /> <!-- Hidden field for Id -->
+            <div class="pb-3">
+                <label asp-for="FirstName" class="p-0"></label>
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="pb-3">
+                <label asp-for="LastName" class="p-0"></label>
+                <input asp-for="LastName" class="form-control" />
+            </div>
+            <div class="pb-3">
+                <label asp-for="Email" class="p-0"></label>
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="pb-3">
+                <div>
+                    <label asp-for="EmailConfirmed" class="p-0"></label>
+                    <select asp-for="EmailConfirmed" class="form-control">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pb-3">
+                <label asp-for="PhoneNumber" class="p-0"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+            </div>
+            <div class="pb-3">
+                <div>
+                    <label asp-for="PhoneNumberConfirmed" class="p-0"></label>
+                    <select asp-for="PhoneNumberConfirmed" class="form-control">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pb-3">
+                <div>
+                    <label asp-for="TwoFactorEnabled" class="p-0"></label>
+                    <select asp-for="TwoFactorEnabled" class="form-control">
+                        <option value="true">True</option>
+                        <option value="false">False</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row pb-3">
+                <div class="col-6 col-md-3">
+                    <button type="submit" class="btn btn-danger form-control">Save</button>
+                </div>
+                <div class="col-6 col-md-3">
+                    <!-- Let's go back to the previous page -->
+                    <a asp-controller="InsuranceCustomer" asp-action="Index" class="btn btn-outline-secondary form-control border">Back To List</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

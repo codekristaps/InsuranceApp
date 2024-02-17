@@ -10,16 +10,13 @@ namespace InsuranceApp.Models
     public class Insurance
     {
         [Key]
-        public int InsuranceId { get; set; }
+        [Required]
+        public Guid InsuranceId { get; set; }
 
         [Required]
-        public string PolicyNumber { get; set; }
+        public string Name { get; set; }
 
-        // Foreign key for the related product
-        public int ProductId { get; set; }
-
-        // Navigation property for the related product
-        public Product Product { get; set; }
-
+        // Navigation property
+        public ICollection<InsuranceProduct> InsuranceProducts { get; set; }
     }
 }

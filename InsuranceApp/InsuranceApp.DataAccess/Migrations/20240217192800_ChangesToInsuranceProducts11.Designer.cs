@@ -4,6 +4,7 @@ using InsuranceApp.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240217192800_ChangesToInsuranceProducts11")]
+    partial class ChangesToInsuranceProducts11
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,27 +42,27 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.HasData(
                         new
                         {
-                            InsuranceId = new Guid("b66b6b38-12c9-4483-83a6-15974a926ba7"),
+                            InsuranceId = new Guid("b274db54-43a4-4146-881b-014913817b2c"),
                             Name = "Life Insurance"
                         },
                         new
                         {
-                            InsuranceId = new Guid("5b954223-15e1-4ae6-9d19-2881f6e5016b"),
+                            InsuranceId = new Guid("b8ed5110-5296-43f4-9093-dcfb4a7b63bc"),
                             Name = "Health Insurance"
                         },
                         new
                         {
-                            InsuranceId = new Guid("6cbb9cc8-e8ca-4c8d-8230-347b95dcd151"),
+                            InsuranceId = new Guid("09f606a9-aa03-4ba7-8a14-d3a21cb2164f"),
                             Name = "Car Insurance"
                         },
                         new
                         {
-                            InsuranceId = new Guid("4428b5ac-b650-4f21-aa21-2d94197e8b78"),
+                            InsuranceId = new Guid("b37e64cc-0e8b-46b3-83b9-d66753476c43"),
                             Name = "Home Insurance"
                         },
                         new
                         {
-                            InsuranceId = new Guid("7104de08-0b1c-4808-b6f2-9a740fdab608"),
+                            InsuranceId = new Guid("af65b1bf-9212-4e4e-b7ef-5314fe06e1fc"),
                             Name = "Travel Insurance"
                         });
                 });
@@ -100,8 +103,7 @@ namespace InsuranceApp.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CustomerId")
-                        .IsRequired()
+                    b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CustomerId1")
@@ -110,8 +112,7 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.Property<Guid>("InsuranceProductId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("PurchaseDate")
-                        .IsRequired()
+                    b.Property<DateTime>("PurchaseDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ProductId");
