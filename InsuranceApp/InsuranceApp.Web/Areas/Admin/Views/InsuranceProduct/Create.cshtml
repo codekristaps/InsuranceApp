@@ -23,6 +23,16 @@
             <span asp-validation-for="InsuranceProduct.Price" class="text-danger"></span>
         </div>
         <div class="form-group">
+            <label asp-for="InsuranceProduct.Discount" class="control-label"></label>
+            <input asp-for="InsuranceProduct.Discount" class="form-control" />
+            <span asp-validation-for="InsuranceProduct.Discount" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="InsuranceProduct.ImageUrl" class="control-label"></label>
+            <input asp-for="InsuranceProduct.ImageUrl" class="form-control" />
+            <span asp-validation-for="InsuranceProduct.ImageUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group">
             <label asp-for="InsuranceProduct.InsuranceId" class="control-label"></label>
             <select asp-for="InsuranceProduct.InsuranceId" class="form-control">
                 <option value="">-- Select Insurance --</option>

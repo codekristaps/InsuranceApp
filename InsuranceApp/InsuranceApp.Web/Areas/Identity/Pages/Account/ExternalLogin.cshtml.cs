@@ -17,13 +17,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using InsuranceApp.Models;
+using InsuranceApp.Utility;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.Web.Mvc;
 
 namespace InsuranceApp.Web.Areas.Identity.Pages.Account
 {
-    [AllowAnonymous]
+    [System.Web.Mvc.AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
+        // adding a RoleManager to seed the database
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
@@ -32,12 +38,14 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
 
         public ExternalLoginModel(
             SignInManager<IdentityUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _userManager = userManager;
             _userStore = userStore;
             _emailStore = GetEmailStore();
@@ -84,12 +92,32 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+
+            // for choosing the roles on the registration page
+            // for learning purposes
+            public string? Role { get; set; }
+
+            // let's create a list for the dropdown
+            [ValidateNever]
+            public IEnumerable<SelectListItem> RoleList { get; set; }
+
+            //[Required]
+            //public string? FirstName { get; set; }
+            //[Required]
+            //public string? LastName { get; set; }
+            //public string? StreetAddress { get; set; }
+            //public string? City { get; set; }
+            //public string? State { get; set; }
+            //// later I need to add the postal code population when I start to type it in the form
+            //public string? PostalCode { get; set; }
+            //[Required]
+            //public DateTime BirthDate { get; set; }
         }
-        
+
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
-        {
+        {  
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -163,6 +191,7 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
                     if (result.Succeeded)
                     {
                         _logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
+                        await _userManager.AddToRoleAsync(user, SD.Role_Customer);
 
                         var userId = await _userManager.GetUserIdAsync(user);
                         var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

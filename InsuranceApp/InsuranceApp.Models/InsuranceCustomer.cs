@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InsuranceApp.Models
 {
@@ -23,9 +24,11 @@ namespace InsuranceApp.Models
         //public DateTime BirthDate { get; set; }
 
         // Navigation property for products purchased by this customer
+        [NotMapped]
         public ICollection<Product> Products { get; set; }
 
         // For the roles
+        [NotMapped]
         public IList<string> Roles { get; set; }
         public string? Role { get; set; }
     }

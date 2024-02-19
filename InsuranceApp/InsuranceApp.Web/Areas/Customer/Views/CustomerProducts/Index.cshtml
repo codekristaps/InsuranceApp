@@ -4,14 +4,11 @@
     <div class="row pt-4 pb-3">
         <div class="col-6">
             <h2>
-                Insurance Products
+                My Products
             </h2>
         </div>
     </div>
-    <p>
-        <a asp-action="Create" class="btn btn-primary">Create New Insurance Product</a>
-    </p>
-    <table class="table">
+    @* <table class="table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -19,6 +16,7 @@
                 <th>Insurance Type</th>
                 <th>Price</th>
                 <th>Discount</th>
+                <th>Product Count</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,13 +29,16 @@
                     <td>@item.Insurance.Name</td>
                     <td>@item.Price</td>
                     <td>@item.Discount</td>
+                    <td>@item.Products.Count</td>
                     <td class="text-end">
-                        <!-- Add the class "text-end" here -->
-                        <a asp-action="Edit" asp-route-id="@item.InsuranceProductId" asp-route-insuranceId="@item.InsuranceId" class="btn editButton">Edit</a>
+                        <a asp-action="Edit" asp-route-id="@item.InsuranceProductId" class="btn editButton">Edit</a>
                         <a asp-action="Delete" asp-route-id="@item.InsuranceProductId" class="btn btn-danger">Delete</a>
+                        <form asp-action="Purchase" asp-route-insuranceProductId="@item.InsuranceProductId" method="post" class="d-inline-block">
+                            <button type="submit" class="btn btn-success">Purchase</button>
+                        </form>
                     </td>
                 </tr>
             }
         </tbody>
-    </table>
+    </table> *@
 </div>

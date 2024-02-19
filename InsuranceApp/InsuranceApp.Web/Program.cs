@@ -3,11 +3,27 @@ using Microsoft.EntityFrameworkCore;
 using InsuranceApp.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using InsuranceApp.Models;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Services added for the Google SignIn
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add the Cart service
+builder.Services.AddScoped<Cart>();
 
 // we want to user EF core
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

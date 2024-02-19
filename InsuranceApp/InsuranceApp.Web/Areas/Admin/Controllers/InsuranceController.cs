@@ -31,18 +31,14 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Insurance/Create
+        // Create a new insurance
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("InsuranceId,Name")] Insurance insurance)
+        public async Task<IActionResult> Create(Insurance insurance)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(insurance);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(insurance);
+            _context.Add(insurance);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Insurance/Delete/5
