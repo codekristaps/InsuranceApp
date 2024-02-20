@@ -4,6 +4,7 @@
 
 using System;
 using System.Threading.Tasks;
+using InsuranceApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -13,13 +14,13 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account.Manage
 {
     public class ResetAuthenticatorModel : PageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly UserManager<InsuranceCustomer> _userManager;
+        private readonly SignInManager<InsuranceCustomer> _signInManager;
         private readonly ILogger<ResetAuthenticatorModel> _logger;
 
         public ResetAuthenticatorModel(
-            UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager,
+            UserManager<InsuranceCustomer> userManager,
+            SignInManager<InsuranceCustomer> signInManager,
             ILogger<ResetAuthenticatorModel> logger)
         {
             _userManager = userManager;

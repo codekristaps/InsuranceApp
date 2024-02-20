@@ -29,7 +29,8 @@ builder.Services.AddScoped<Cart>();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+// Adjusted to the InsuranceCustomer before role for the external login
+builder.Services.AddIdentity<InsuranceCustomer, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 // configure additional pages
 builder.Services.ConfigureApplicationCookie(options =>

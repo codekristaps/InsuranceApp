@@ -27,28 +27,22 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
     [System.Web.Mvc.AllowAnonymous]
     public class ExternalLoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        // adding a RoleManager to seed the database
+        private readonly SignInManager<InsuranceCustomer> _signInManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IUserStore<IdentityUser> _userStore;
-        private readonly IUserEmailStore<IdentityUser> _emailStore;
-        private readonly IEmailSender _emailSender;
+        private readonly UserManager<InsuranceCustomer> _userManager;
         private readonly ILogger<ExternalLoginModel> _logger;
+        private readonly IEmailSender _emailSender;
 
         public ExternalLoginModel(
-            SignInManager<IdentityUser> signInManager,
+            SignInManager<InsuranceCustomer> signInManager,
             RoleManager<IdentityRole> roleManager,
-            UserManager<IdentityUser> userManager,
-            IUserStore<IdentityUser> userStore,
+            UserManager<InsuranceCustomer> userManager,
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender)
         {
             _signInManager = signInManager;
             _roleManager = roleManager;
             _userManager = userManager;
-            _userStore = userStore;
-            _emailStore = GetEmailStore();
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -101,10 +95,11 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
             [ValidateNever]
             public IEnumerable<SelectListItem> RoleList { get; set; }
 
-            //[Required]
-            //public string? FirstName { get; set; }
-            //[Required]
-            //public string? LastName { get; set; }
+            [Required]
+            public string? FirstName { get; set; }
+            [Required]
+            public string? LastName { get; set; }
+
             //public string? StreetAddress { get; set; }
             //public string? City { get; set; }
             //public string? State { get; set; }
@@ -117,7 +112,7 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
         public IActionResult OnGet() => RedirectToPage("./Login");
 
         public IActionResult OnPost(string provider, string returnUrl = null)
-        {  
+        {
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -159,7 +154,11 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+
+                        // added so I can pull the first and last name from the external provider
+                        FirstName = info.Principal.FindFirstValue(ClaimTypes.GivenName),
+                        LastName = info.Principal.FindFirstValue(ClaimTypes.Surname)
                     };
                 }
                 return Page();
@@ -181,8 +180,9 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+                // Replace _userStore and _emailStore with _userManager
+                await _userManager.SetUserNameAsync(user, Input.Email);
+                await _userManager.SetEmailAsync(user, Input.Email);
 
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
@@ -226,27 +226,23 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private InsuranceCustomer CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                var user = Activator.CreateInstance<InsuranceCustomer>();
+                user.UserName = Input.Email;
+                user.Email = Input.Email;
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+                return user;
             }
             catch
             {
-                throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
-                    $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor, or alternatively " +
+                throw new InvalidOperationException($"Can't create an instance of '{nameof(InsuranceCustomer)}'. " +
+                    $"Ensure that '{nameof(InsuranceCustomer)}' is not an abstract class and has a parameterless constructor, or alternatively " +
                     $"override the external login page in /Areas/Identity/Pages/Account/ExternalLogin.cshtml");
             }
-        }
-
-        private IUserEmailStore<IdentityUser> GetEmailStore()
-        {
-            if (!_userManager.SupportsUserEmail)
-            {
-                throw new NotSupportedException("The default UI requires a user store with email support.");
-            }
-            return (IUserEmailStore<IdentityUser>)_userStore;
         }
     }
 }

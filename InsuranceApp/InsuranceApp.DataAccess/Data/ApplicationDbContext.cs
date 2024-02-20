@@ -22,6 +22,7 @@ namespace InsuranceApp.DataAccess.Data
         public DbSet<Insurance> Insurances { get; set; }
         public DbSet<InsuranceProduct> InsuranceProducts { get; set; }
         public DbSet<Cart> Cart { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,6 +35,11 @@ namespace InsuranceApp.DataAccess.Data
                         .HasColumnType("decimal(18,2)"); // Example: Decimal with precision 18 and scale 2
 
             modelBuilder.Entity<Cart>().HasNoKey();
+
+            // Entity<Order>() returns an object that can be used to configure the Order entity.
+            modelBuilder.Entity<Order>()
+                        .Property(o => o.Status) // Property() returns an object that can be used to configure the Status property.
+                        .HasConversion<string>(); // HasConversion() returns an object that can be used to configure the conversion for the Status property.
 
             modelBuilder.Entity<Insurance>().HasData(
                 new Insurance

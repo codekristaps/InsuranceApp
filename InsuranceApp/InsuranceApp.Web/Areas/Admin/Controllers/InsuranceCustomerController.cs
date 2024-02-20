@@ -14,9 +14,9 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _context;
         // for managing roles
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<InsuranceCustomer> _userManager;
 
-        public InsuranceCustomerController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public InsuranceCustomerController(ApplicationDbContext context, UserManager<InsuranceCustomer> userManager)
         {
             _context = context;
             // for managing roles
@@ -25,17 +25,13 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Retrieve all customers from the database
-            List<InsuranceCustomer> customers = await _context.InsuranceCustomer.ToListAsync();
+            // Retrieve all InsuranceCustomer users from the database
+            var customers = await _userManager.Users.OfType<InsuranceCustomer>().ToListAsync();
 
             foreach (var customer in customers)
             {
-                var user = await _userManager.FindByIdAsync(customer.Id);
-                if (user != null)
-                {
-                    var roles = await _userManager.GetRolesAsync(user);
-                    customer.Roles = roles;
-                }
+                // Retrieve the roles for each customer
+                customer.Roles = await _userManager.GetRolesAsync(customer);
             }
 
             // Pass the list of customers to the view
@@ -101,63 +97,28 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("Id,FirstName,LastName,Email,EmailConfirmed,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,Roles")] InsuranceCustomer model)
         {
-            if (id != model.Id)
+
+            // Get the existing customer from the database
+            var existingCustomer = await _context.InsuranceCustomer.FindAsync(model.Id);
+
+            if (existingCustomer == null)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Get the existing customer from the database
-                    var existingCustomer = await _context.InsuranceCustomer.FindAsync(model.Id);
+            // Update the properties
+            existingCustomer.FirstName = model.FirstName;
+            existingCustomer.LastName = model.LastName;
+            existingCustomer.Email = model.Email;
+            existingCustomer.EmailConfirmed = model.EmailConfirmed;
+            existingCustomer.PhoneNumber = model.PhoneNumber;
+            existingCustomer.PhoneNumberConfirmed = model.PhoneNumberConfirmed;
+            existingCustomer.TwoFactorEnabled = model.TwoFactorEnabled;
 
-                    if (existingCustomer == null)
-                    {
-                        return NotFound();
-                    }
-
-                    // Update the properties
-                    existingCustomer.FirstName = model.FirstName;
-                    existingCustomer.LastName = model.LastName;
-                    existingCustomer.Email = model.Email;
-                    existingCustomer.EmailConfirmed = model.EmailConfirmed;
-                    existingCustomer.PhoneNumber = model.PhoneNumber;
-                    existingCustomer.PhoneNumberConfirmed = model.PhoneNumberConfirmed;
-                    existingCustomer.TwoFactorEnabled = model.TwoFactorEnabled;
-
-                    // Save the changes
-                    _context.Update(existingCustomer);
-                    await _context.SaveChangesAsync();
-
-                    // Update the roles
-                    var user = await _userManager.FindByIdAsync(existingCustomer.Id);
-                    if (user != null)
-                    {
-                        var roles = await _userManager.GetRolesAsync(user);
-                        await _userManager.RemoveFromRolesAsync(user, roles);
-
-                        if (model.Roles != null)
-                        {
-                            await _userManager.AddToRolesAsync(user, model.Roles);
-                        }
-                    }
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InsuranceCustomerExists(model.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(model);
+            // Save the changes
+            _context.Update(existingCustomer);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
         }
 
         private bool InsuranceCustomerExists(string id)
