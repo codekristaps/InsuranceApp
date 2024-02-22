@@ -22,5 +22,19 @@ html {
 
 body {
     margin-bottom: 60px;
-    color: #fff !important;
+    background-color: #faf9f7;
 }
+
+nav, footer {
+    background-color: #f1ece8;
+}
+
+.editButton {
+    background-color: #0054f0;
+    color: #faf9f7;
+}
+
+    .editButton:hover {
+        background-color: #004080;
+        color: #faf9f7;
+    }
