@@ -22,6 +22,32 @@ namespace InsuranceApp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("InsuranceApp.Models.AdminDashboardViewModel", b =>
+                {
+                    b.Property<decimal>("GrowthRate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("TotalInsuranceCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalInsuranceProductsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalOrdersCount")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalSalesAmount")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TotalSalesLastMonth")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalUsersCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("AdminDashboard");
+                });
+
             modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
                 {
                     b.Property<Guid>("CustomerId")
@@ -86,6 +112,7 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Discount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageUrl")
@@ -162,11 +189,9 @@ namespace InsuranceApp.DataAccess.Migrations
 
             modelBuilder.Entity("InsuranceApp.Models.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CustomerId")
                         .IsRequired()
@@ -184,6 +209,7 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
@@ -205,6 +231,7 @@ namespace InsuranceApp.DataAccess.Migrations
 
                     b.Property<decimal?>("Discount")
                         .IsRequired()
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("ExpirationDate")
@@ -222,6 +249,7 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("PurchasePrice")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("ProductId");

@@ -20,11 +20,15 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
+        private readonly UserManager<InsuranceCustomer> _userManager;
         private readonly SignInManager<InsuranceCustomer> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<InsuranceCustomer> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<InsuranceCustomer> signInManager,
+            ILogger<LoginModel> logger,
+            UserManager<InsuranceCustomer> userManager)
         {
+            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
         }
@@ -115,6 +119,16 @@ namespace InsuranceApp.Web.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(Input.Email);
+                    if (user != null)
+                    {
+                        var roles = await _userManager.GetRolesAsync(user);
+                        if (roles.Contains("Admin"))
+                        {
+                            return LocalRedirect("~/Admin/Home/Index");
+                        }
+                    }
+
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

@@ -1,0 +1,84 @@
+﻿@model AdminDashboardViewModel
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2>Admin dashboard</h2>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <h2>Database</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Total Insurances</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalInsuranceCount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-primary  mb-3">
+                    <div class="card-header">Total Insurance Products</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalInsuranceProductsCount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-primary  mb-3">
+                    <div class="card-header">Total Orders</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalOrdersCount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-warning  mb-3">
+                    <div class="card-header">Total Users</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalUsersCount</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <h2>Sales statistics</h2>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Total Sales</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalSalesAmount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Total Sales This Month</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalSalesAmount</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Total Sales Previous Month</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalSalesAmount</h5>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Monthly Sales Growth Rate</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.TotalSalesAmount</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

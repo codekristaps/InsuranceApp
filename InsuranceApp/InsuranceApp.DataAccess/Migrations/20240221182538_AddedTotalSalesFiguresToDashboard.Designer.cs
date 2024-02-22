@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240218111322_AddedImageUrls")]
-    partial class AddedImageUrls
+    [Migration("20240221182538_AddedTotalSalesFiguresToDashboard")]
+    partial class AddedTotalSalesFiguresToDashboard
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,14 +25,42 @@ namespace InsuranceApp.DataAccess.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("InsuranceApp.Models.AdminDashboardViewModel", b =>
+                {
+                    b.Property<int>("TotalInsuranceCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalInsuranceProductsCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalOrdersCount")
+                        .HasColumnType("int");
+
+                    b.Property<double>("TotalSalesAmount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("TotalUsersCount")
+                        .HasColumnType("int");
+
+                    b.ToTable("AdminDashboard");
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
+                {
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.ToTable("Cart");
+                });
+
             modelBuilder.Entity("InsuranceApp.Models.Insurance", b =>
                 {
                     b.Property<Guid>("InsuranceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<decimal?>("Discount")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -81,6 +109,7 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal?>("Discount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImageUrl")
@@ -155,6 +184,38 @@ namespace InsuranceApp.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("InsuranceApp.Models.Order", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("TotalAmount")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Orders");
+                });
+
             modelBuilder.Entity("InsuranceApp.Models.Product", b =>
                 {
                     b.Property<Guid>("ProductId")
@@ -165,19 +226,30 @@ namespace InsuranceApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CustomerId1")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<decimal?>("Discount")
+                        .IsRequired()
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("ExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("InsuranceProductId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MarketingCampaign")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("PurchaseDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
 
-                    b.HasKey("ProductId");
+                    b.Property<decimal>("PurchasePrice")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
-                    b.HasIndex("CustomerId1");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("InsuranceProductId");
 
@@ -406,17 +478,13 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("InsuranceCustomer");
                 });
 
             modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
                 {
                     b.HasOne("InsuranceApp.Models.Insurance", "Insurance")
-                        .WithMany("InsuranceProducts")
+                        .WithMany()
                         .HasForeignKey("InsuranceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -424,19 +492,24 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.Navigation("Insurance");
                 });
 
-            modelBuilder.Entity("InsuranceApp.Models.Product", b =>
+            modelBuilder.Entity("InsuranceApp.Models.Order", b =>
                 {
                     b.HasOne("InsuranceApp.Models.InsuranceCustomer", "Customer")
-                        .WithMany("Products")
-                        .HasForeignKey("CustomerId1");
-
-                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "InsuranceProduct")
-                        .WithMany("Products")
-                        .HasForeignKey("InsuranceProductId")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.Product", b =>
+                {
+                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "InsuranceProduct")
+                        .WithMany()
+                        .HasForeignKey("InsuranceProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("InsuranceProduct");
                 });
@@ -490,21 +563,6 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("InsuranceApp.Models.Insurance", b =>
-                {
-                    b.Navigation("InsuranceProducts");
-                });
-
-            modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("InsuranceApp.Models.InsuranceCustomer", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

@@ -23,18 +23,32 @@ namespace InsuranceApp.DataAccess.Data
         public DbSet<InsuranceProduct> InsuranceProducts { get; set; }
         public DbSet<Cart> Cart { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<AdminDashboardViewModel> AdminDashboard { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // for the identity we need this one piece of line
             base.OnModelCreating(modelBuilder);
 
-            // Configure the column type for the Price property
             modelBuilder.Entity<InsuranceProduct>()
-                        .Property(p => p.Price)
-                        .HasColumnType("decimal(18,2)"); // Example: Decimal with precision 18 and scale 2
+                .Property(b => b.Discount)
+                .HasPrecision(18, 2); // Precision 18, Scale 2
+
+            modelBuilder.Entity<Order>()
+                .Property(b => b.TotalAmount)
+                .HasPrecision(18, 2); // Precision 18, Scale 2
+
+            modelBuilder.Entity<Product>()
+                .Property(b => b.Discount)
+                .HasPrecision(18, 2); // Precision 18, Scale 2
+
+            modelBuilder.Entity<Product>()
+                .Property(b => b.PurchasePrice)
+                .HasPrecision(18, 2); // Precision 18, Scale 2
 
             modelBuilder.Entity<Cart>().HasNoKey();
+
+            modelBuilder.Entity<AdminDashboardViewModel>().HasNoKey();
 
             // Entity<Order>() returns an object that can be used to configure the Order entity.
             modelBuilder.Entity<Order>()

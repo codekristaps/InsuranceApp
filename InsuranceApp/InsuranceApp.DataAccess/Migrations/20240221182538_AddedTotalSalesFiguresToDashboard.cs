@@ -5,25 +5,25 @@
 namespace InsuranceApp.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedPurchasePriceToProduct : Migration
+    public partial class AddedTotalSalesFiguresToDashboard : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<decimal>(
-                name: "PurchasePrice",
-                table: "Products",
-                type: "decimal(18,2)",
+            migrationBuilder.AddColumn<double>(
+                name: "TotalSalesAmount",
+                table: "AdminDashboard",
+                type: "float",
                 nullable: false,
-                defaultValue: 0m);
+                defaultValue: 0.0);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "PurchasePrice",
-                table: "Products");
+                name: "TotalSalesAmount",
+                table: "AdminDashboard");
         }
     }
 }
