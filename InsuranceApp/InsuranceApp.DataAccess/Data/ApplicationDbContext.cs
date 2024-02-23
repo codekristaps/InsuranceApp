@@ -21,7 +21,7 @@ namespace InsuranceApp.DataAccess.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Insurance> Insurances { get; set; }
         public DbSet<InsuranceProduct> InsuranceProducts { get; set; }
-        public DbSet<Cart> Cart { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<AdminDashboardViewModel> AdminDashboard { get; set; }
 
@@ -45,8 +45,6 @@ namespace InsuranceApp.DataAccess.Data
             modelBuilder.Entity<Product>()
                 .Property(b => b.PurchasePrice)
                 .HasPrecision(18, 2); // Precision 18, Scale 2
-
-            modelBuilder.Entity<Cart>().HasNoKey();
 
             modelBuilder.Entity<AdminDashboardViewModel>().HasNoKey();
 

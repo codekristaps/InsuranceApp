@@ -50,13 +50,18 @@ namespace InsuranceApp.DataAccess.Migrations
 
             modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
+                    b.HasKey("Id");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("InsuranceApp.Models.Insurance", b =>
@@ -99,6 +104,29 @@ namespace InsuranceApp.DataAccess.Migrations
                             InsuranceId = new Guid("7104de08-0b1c-4808-b6f2-9a740fdab608"),
                             Name = "Travel Insurance"
                         });
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.InsuranceApp.Models.CartItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
@@ -484,6 +512,25 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("InsuranceCustomer");
                 });
 
+            modelBuilder.Entity("InsuranceApp.Models.InsuranceApp.Models.CartItem", b =>
+                {
+                    b.HasOne("InsuranceApp.Models.Cart", "Cart")
+                        .WithMany("CartItems")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
                 {
                     b.HasOne("InsuranceApp.Models.Insurance", "Insurance")
@@ -566,6 +613,11 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

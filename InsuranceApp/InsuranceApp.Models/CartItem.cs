@@ -12,14 +12,14 @@ namespace InsuranceApp.Models
         public class CartItem
         {
             [Key]
-            public int Id { get; set; }
-            public int CartId { get; set; }
+            public Guid Id { get; set; }
+            [Required]
+            public Guid CartId { get; set; }
             [Required]
             public Guid ProductId { get; set; }
 
-            // Navigation properties
+            // Navigation property
             public Cart Cart { get; set; }
-            public InsuranceProduct Product { get; set; }
         }
     }
 }

@@ -27,13 +27,12 @@ namespace InsuranceApp.Web.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(int id) // Change Guid to int
+        public IActionResult RemoveFromCart(Guid id)
         {
             var cartItem = _cart.CartItems.FirstOrDefault(i => i.Id == id);
             if (cartItem != null)
             {
                 _cart.CartItems.Remove(cartItem);
-                // You might need to update your Cart service to persist these changes
             }
             return RedirectToAction("Index");
         }

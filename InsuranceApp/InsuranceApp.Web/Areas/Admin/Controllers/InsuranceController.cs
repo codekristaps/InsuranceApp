@@ -59,6 +59,38 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
             return View(insurance);
         }
 
+        // Edit insurance
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var insurance = await _context.Insurances.FindAsync(id);
+            if (insurance == null)
+            {
+                return NotFound();
+            }
+            return View(insurance);
+        }
+
+        // POST: Insurance/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, Insurance insurance)
+        {
+            // Validate the Model state?
+            _context.Update(insurance);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        private bool InsuranceExists(Guid insuranceId)
+        {
+            throw new NotImplementedException();
+        }
+
         // POST: Insurance/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

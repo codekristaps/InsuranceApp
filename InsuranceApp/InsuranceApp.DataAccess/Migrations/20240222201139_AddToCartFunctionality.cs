@@ -8,23 +8,26 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InsuranceApp.DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedAdminDashboardMode : Migration
+    public partial class AddToCartFunctionality : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AdminDashboard",
-                columns: table => new
-                {
-                    TotalInsuranceCount = table.Column<int>(type: "int", nullable: false),
-                    TotalInsuranceProductsCount = table.Column<int>(type: "int", nullable: false),
-                    TotalUsersCount = table.Column<int>(type: "int", nullable: false),
-                    TotalOrdersCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                });
+            //migrationBuilder.CreateTable(
+            //    name: "AdminDashboard",
+            //    columns: table => new
+            //    {
+            //        TotalInsuranceCount = table.Column<int>(type: "int", nullable: false),
+            //        TotalInsuranceProductsCount = table.Column<int>(type: "int", nullable: false),
+            //        TotalUsersCount = table.Column<int>(type: "int", nullable: false),
+            //        TotalOrdersCount = table.Column<int>(type: "int", nullable: false),
+            //        TotalSalesAmount = table.Column<double>(type: "float", nullable: false),
+            //        TotalSalesLastMonth = table.Column<double>(type: "float", nullable: false),
+            //        GrowthRate = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+            //    },
+            //    constraints: table =>
+            //    {
+            //    });
 
             //migrationBuilder.CreateTable(
             //    name: "AspNetRoles",
@@ -69,16 +72,18 @@ namespace InsuranceApp.DataAccess.Migrations
             //        table.PrimaryKey("PK_AspNetUsers", x => x.Id);
             //    });
 
-            //migrationBuilder.CreateTable(
-            //    name: "Cart",
-            //    columns: table => new
-            //    {
-            //        Id = table.Column<int>(type: "int", nullable: false),
-            //        CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-            //    },
-            //    constraints: table =>
-            //    {
-            //    });
+            migrationBuilder.CreateTable(
+                name: "Carts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Carts", x => x.Id);
+                });
 
             //migrationBuilder.CreateTable(
             //    name: "Insurances",
@@ -243,6 +248,32 @@ namespace InsuranceApp.DataAccess.Migrations
             //            onDelete: ReferentialAction.Cascade);
             //    });
 
+            migrationBuilder.CreateTable(
+                name: "CartItem",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartItem", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CartItem_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItem_InsuranceProducts_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "InsuranceProducts",
+                        principalColumn: "InsuranceProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             //migrationBuilder.CreateTable(
             //    name: "Products",
             //    columns: table => new
@@ -330,6 +361,16 @@ namespace InsuranceApp.DataAccess.Migrations
             //    unique: true,
             //    filter: "[NormalizedUserName] IS NOT NULL");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItem_CartId",
+                table: "CartItem",
+                column: "CartId");
+
+            //migrationBuilder.CreateIndex(
+            //    name: "IX_CartItem_ProductId",
+            //    table: "CartItem",
+            //    column: "ProductId");
+
             //migrationBuilder.CreateIndex(
             //    name: "IX_InsuranceProducts_InsuranceId",
             //    table: "InsuranceProducts",
@@ -368,7 +409,7 @@ namespace InsuranceApp.DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Cart");
+                name: "CartItem");
 
             migrationBuilder.DropTable(
                 name: "Orders");
@@ -378,6 +419,9 @@ namespace InsuranceApp.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

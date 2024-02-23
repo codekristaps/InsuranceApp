@@ -11,7 +11,7 @@ namespace InsuranceApp.Models
     public class Cart
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         [Required]
         public Guid CustomerId { get; set; } // need to check this
         public List<CartItem> CartItems { get; set; }
