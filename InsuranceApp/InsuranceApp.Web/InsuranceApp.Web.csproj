@@ -26,4 +26,8 @@
     <ProjectReference Include="..\InsuranceApp.DataAccess\InsuranceApp.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

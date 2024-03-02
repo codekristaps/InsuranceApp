@@ -1,10 +1,13 @@
 ﻿using InsuranceApp.DataAccess.Data;
+using InsuranceApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceApp.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize(Roles = SD.Role_Customer)]
     public class CustomerProductsController : Controller
     {
         private readonly ApplicationDbContext _context;

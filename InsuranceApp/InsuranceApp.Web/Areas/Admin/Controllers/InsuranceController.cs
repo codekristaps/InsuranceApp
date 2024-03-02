@@ -4,6 +4,7 @@ using InsuranceApp.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace InsuranceApp.Web.Areas.Admin.Controllers
 {
@@ -31,14 +32,29 @@ namespace InsuranceApp.Web.Areas.Admin.Controllers
             return View();
         }
 
+        public class InsuranceWrite
+        {
+            [Required]
+            public string Name { get; set; }
+        }
+
         // Create a new insurance
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Insurance insurance)
+        public async Task<IActionResult> Create(InsuranceWrite insurance)
         {
-            _context.Add(insurance);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            if (ModelState.IsValid)
+            {
+                var insur = new Insurance
+                {
+                    InsuranceId = Guid.NewGuid(),
+                    Name = insurance.Name
+                };
+                _context.Add(insur);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            return View(insurance);
         }
 
         // GET: Insurance/Delete/5

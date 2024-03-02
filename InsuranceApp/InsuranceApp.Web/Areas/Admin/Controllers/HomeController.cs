@@ -2,7 +2,6 @@
 using InsuranceApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace InsuranceApp.Web.Areas.Admin.Controllers
 {
