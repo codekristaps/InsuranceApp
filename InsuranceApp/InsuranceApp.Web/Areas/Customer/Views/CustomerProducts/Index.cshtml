@@ -9,42 +9,37 @@
         </div>
     </div>
     <!-- Purchase Product button-->
-    <div class="row">
-        <div class="col-12">
-            <a asp-action="Purchase" class="btn btn-primary">Purchase Product</a>
-        </div>
-    </div>
-    @* <table class="table">
-    <thead>
-    <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Insurance Type</th>
-    <th>Price</th>
-    <th>Discount</th>
-    <th>Product Count</th>
-    <th></th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
-    {
-    <tr>
-    <td>@item.Name</td>
-    <td>@item.Description</td>
-    <td>@item.Insurance.Name</td>
-    <td>@item.Price</td>
-    <td>@item.Discount</td>
-    <td>@item.Products.Count</td>
-    <td class="text-end">
-    <a asp-action="Edit" asp-route-id="@item.InsuranceProductId" class="btn editButton">Edit</a>
-    <a asp-action="Delete" asp-route-id="@item.InsuranceProductId" class="btn btn-danger">Delete</a>
-    <form asp-action="Purchase" asp-route-insuranceProductId="@item.InsuranceProductId" method="post" class="d-inline-block">
-    <button type="submit" class="btn btn-success">Purchase</button>
-    </form>
-    </td>
-    </tr>
-    }
-    </tbody>
-    </table> *@
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Insurance Type</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Product Count</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Description</td>
+                    <td>@item.Insurance.Name</td>
+                    <td>@item.Price</td>
+                    <td>@item.Discount</td>
+                    <td>@item.Products.Count</td>
+                    <td class="text-end">
+                        <a asp-action="Edit" asp-route-id="@item.InsuranceProductId" class="btn editButton">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.InsuranceProductId" class="btn btn-danger">Delete</a>
+                        <form asp-action="Purchase" asp-route-insuranceProductId="@item.InsuranceProductId" method="post" class="d-inline-block">
+                            <button type="submit" class="btn btn-success">Purchase</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

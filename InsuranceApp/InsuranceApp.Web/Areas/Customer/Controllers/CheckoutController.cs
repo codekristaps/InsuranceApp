@@ -1,6 +1,7 @@
 ﻿using InsuranceApp.DataAccess.Data;
 using InsuranceApp.Models;
-using InsuranceApp.Models.InsuranceApp.Models;
+using InsuranceApp.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -8,40 +9,52 @@ using System.Linq;
 namespace InsuranceApp.Web.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [Authorize(Roles = SD.Role_Customer)]
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly Cart _cart;
 
-        public CheckoutController(ApplicationDbContext context, Cart cart)
+        public CheckoutController(ApplicationDbContext context)
         {
             _context = context;
-            _cart = cart;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(Guid customerId)
         {
-            var cartItems = _cart.CartItems ?? new List<CartItem>(); // Ensure CartItems is not null
-            _cart.CartItems = cartItems;
-            return View(_cart);
+            var cart = _context.Carts
+                .Include(c => c.InsuranceProduct)
+                .FirstOrDefault(c => c.CustomerId == customerId);
+
+            if (cart == null)
+            {
+                // Handle the case where the cart is not found
+                return NotFound();
+            }
+
+            return View(cart);
         }
 
         [HttpPost]
-        public IActionResult RemoveFromCart(Guid id)
+        public IActionResult RemoveFromCart(Guid customerId)
         {
-            var cartItem = _cart.CartItems.FirstOrDefault(i => i.Id == id);
-            if (cartItem != null)
+            var cart = _context.Carts.FirstOrDefault(c => c.CustomerId == customerId);
+            if (cart != null)
             {
-                _cart.CartItems.Remove(cartItem);
+                _context.Carts.Remove(cart);
+                _context.SaveChanges();
             }
             return RedirectToAction("Index");
         }
 
         [HttpPost]
-        public IActionResult CancelOrder()
+        public IActionResult CancelOrder(Guid customerId)
         {
-            _cart.CartItems.Clear();
-            _context.SaveChanges();
+            var cart = _context.Carts.FirstOrDefault(c => c.CustomerId == customerId);
+            if (cart != null)
+            {
+                _context.Carts.Remove(cart);
+                _context.SaveChanges();
+            }
             return RedirectToAction("Index", "Home");
         }
     }

@@ -1,6 +1,6 @@
 ﻿using InsuranceApp.DataAccess.Data;
 using InsuranceApp.Models;
-using InsuranceApp.Models.InsuranceApp.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -24,43 +24,25 @@ namespace InsuranceApp.Web.Areas.Customer.Controllers
             return View(products);
         }
 
-        // Add to cart button
+        // Add product to the cart when I click on the Add to Cart button
         [HttpPost]
-        public async Task<IActionResult> AddToCheckout(Guid id)
+        public async Task<IActionResult> AddProductToCart(Guid insuranceProductId, Guid customerId)
         {
-            // Get the current user's id
-            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var cart = _context.Carts.FirstOrDefault(c => c.CustomerId == customerId);
 
-            // Get the current user's cart
-            var cart = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == userId);
-
-            // If the cart doesn't exist, create a new one
             if (cart == null)
             {
-                cart = new Cart
-                {
-                    CustomerId = userId,
-                    CartItems = new List<CartItem>()
-                };
+                cart = new Cart { CustomerId = customerId, ProductId = insuranceProductId };
                 _context.Carts.Add(cart);
-                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                cart.ProductId = insuranceProductId;
             }
 
-            // Create a new CartItem
-            var cartItem = new CartItem { CartId = cart.Id, ProductId = id };
-
-            // Add the CartItem to the Cart
-            cart.CartItems.Add(cartItem);
-
-            // Save changes
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
-        }
-
-        public async Task<IActionResult> PruchaseProduct()
-        {
-            return View();
+            return Ok();
         }
     }
 }

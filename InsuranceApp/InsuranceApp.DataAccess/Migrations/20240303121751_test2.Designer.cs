@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InsuranceApp.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240222201139_AddToCartFunctionality")]
-    partial class AddToCartFunctionality
+    [Migration("20240303121751_test2")]
+    partial class test2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,16 +53,19 @@ namespace InsuranceApp.DataAccess.Migrations
 
             modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Carts");
                 });
@@ -107,29 +110,6 @@ namespace InsuranceApp.DataAccess.Migrations
                             InsuranceId = new Guid("7104de08-0b1c-4808-b6f2-9a740fdab608"),
                             Name = "Travel Insurance"
                         });
-                });
-
-            modelBuilder.Entity("InsuranceApp.Models.InsuranceApp.Models.CartItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItem");
                 });
 
             modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
@@ -515,23 +495,15 @@ namespace InsuranceApp.DataAccess.Migrations
                     b.HasDiscriminator().HasValue("InsuranceCustomer");
                 });
 
-            modelBuilder.Entity("InsuranceApp.Models.InsuranceApp.Models.CartItem", b =>
+            modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
                 {
-                    b.HasOne("InsuranceApp.Models.Cart", "Cart")
-                        .WithMany("CartItems")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "Product")
+                    b.HasOne("InsuranceApp.Models.InsuranceProduct", "InsuranceProduct")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cart");
-
-                    b.Navigation("Product");
+                    b.Navigation("InsuranceProduct");
                 });
 
             modelBuilder.Entity("InsuranceApp.Models.InsuranceProduct", b =>
@@ -616,11 +588,6 @@ namespace InsuranceApp.DataAccess.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("InsuranceApp.Models.Cart", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

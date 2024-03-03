@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -67,23 +68,23 @@
                                 </ul>
                             </li>
                         }
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </li>
-                </ul>
-                    @if (User.Identity.IsAuthenticated && !User.IsInRole(SD.Role_Admin))
-                    {
-                    <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="Customer" asp-controller="Checkout" asp-action="Index">
-                                <i class="fas fa-shopping-cart"></i>
-                            </a>
+                            <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
+                    @if (User.Identity.IsAuthenticated && !User.IsInRole(SD.Role_Admin))
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Customer" asp-controller="Checkout" asp-action="Index" asp-route-customerId="@User.FindFirstValue("CustomerId")">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </a>
+                            </li>
+                        </ul>
                     }
-                <!-- Adding the Login and Register buttons -->
-                <partial name="_LoginPartial" />
-            </div>
+                    <!-- Adding the Login and Register buttons -->
+                    <partial name="_LoginPartial" />
+                </div>
             </div>
         </nav>
     </header>

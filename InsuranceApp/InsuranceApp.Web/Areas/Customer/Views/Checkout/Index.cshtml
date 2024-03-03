@@ -1,4 +1,7 @@
 ﻿@model Cart
+@{
+    var product = Model.InsuranceProduct;
+}
 
 <div class="container">
     <div class="row pt-4 pb-3">
@@ -8,32 +11,30 @@
             </h2>
         </div>
     </div>
-    @* <div class="row">
-        @foreach (var item in Model.CartItems)
-        {
-            <div class="col-md-4">
-                <div class="card mb-4 shadow-sm">
-                    <img class="card-img-top" src="@item.Product.ImageUrl" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">@item.Product.Name</h5>
-                        <p class="card-text">@item.Product.Description</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="btn-group">
-                                <form asp-controller="Checkout" asp-action="RemoveFromCart" method="post">
-                                    <input type="hidden" name="id" value="@item.Id.ToString()" /> <!-- Ensure this is a Guid -->
-                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Remove</button>
-                                </form>
-                            </div>
-                            <small class="text-muted">$@item.Product.Price</small>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="@product.ImageUrl" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">@product.Description</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <form asp-controller="Checkout" asp-action="RemoveFromCart" method="post">
+                                <input type="hidden" name="customerId" value="@Model.CustomerId.ToString()" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">Remove</button>
+                            </form>
                         </div>
+                        <small class="text-muted">$@product.Price</small>
                     </div>
                 </div>
             </div>
-        }
-    </div> *@
+        </div>
+    </div>
     <div class="row">
         <div class="col-12">
-            <form asp-controller="Purchase" asp-action="CancelOrder" method="post">
+            <form asp-controller="Checkout" asp-action="CancelOrder" method="post">
+                <input type="hidden" name="customerId" value="@Model.CustomerId.ToString()" />
                 <button type="submit" class="btn btn-danger">Cancel Order</button>
             </form>
             <form asp-controller="Purchase" asp-action="Purchase" method="post">

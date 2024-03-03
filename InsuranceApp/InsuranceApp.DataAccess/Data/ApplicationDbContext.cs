@@ -53,6 +53,14 @@ namespace InsuranceApp.DataAccess.Data
                         .Property(o => o.Status) // Property() returns an object that can be used to configure the Status property.
                         .HasConversion<string>(); // HasConversion() returns an object that can be used to configure the conversion for the Status property.
 
+            modelBuilder.Entity<Cart>()
+            .Property(c => c.CustomerId)
+            .HasColumnType("uniqueidentifier");
+
+            modelBuilder.Entity<Cart>()
+                .Property(c => c.ProductId)
+                .HasColumnType("uniqueidentifier");
+
             modelBuilder.Entity<Insurance>().HasData(
                 new Insurance
                 {
