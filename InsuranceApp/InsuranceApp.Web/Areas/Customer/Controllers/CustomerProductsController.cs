@@ -20,11 +20,24 @@ namespace InsuranceApp.Web.Areas.Customer.Controllers
         // View all insurances
         public IActionResult Index()
         {
-            // Get the list of products from the database
-            var products = _context.InsuranceProducts.Include(p => p.Products).ToList();
+            // If no products just return the view
+            if (_context.InsuranceProducts.Count() == 0)
+            {
+                return View();
+            }
+            else
+            {
+                // Get the list of products from the database
+                var products = _context.InsuranceProducts.ToList();
 
-            // Return the view with the list of products as the model
-            return View(products);
+                // Return the view with the list of products as the model
+                return View(products);
+            }
+        }
+
+        public IActionResult Purchase()
+        {
+            return View();
         }
     }
 }

@@ -35,7 +35,6 @@ namespace InsuranceApp.Web.Areas.Customer.Controllers
             var cart = await _context.Carts.FirstOrDefaultAsync(c => c.CustomerId == userId);
 
             // If the cart doesn't exist, create a new one
-            // If the cart doesn't exist, create a new one
             if (cart == null)
             {
                 cart = new Cart
@@ -57,6 +56,11 @@ namespace InsuranceApp.Web.Areas.Customer.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> PruchaseProduct()
+        {
+            return View();
         }
     }
 }
